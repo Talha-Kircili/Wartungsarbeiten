@@ -1,3 +1,4 @@
+from multiprocessing import freeze_support
 from os.path import expanduser
 from json import loads
 from csv import writer
@@ -26,10 +27,10 @@ def connect(host, username, key_file):
         return -1
     return ssh_client
 
-def command(host, hostname, cmd):
+def command(host, hostname, cmd, shell=False):
     output = ""
     print(f"{hostname}: {cmd}")
-    stdin, stdout, stderr = host.exec_command(cmd)
+    stdin, stdout, stderr = host.exec_command(cmd, get_pty=shell)
     if stdout.channel.recv_exit_status() == 0:
         output = stdout.read().decode("utf8")
     else:
