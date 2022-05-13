@@ -22,6 +22,7 @@ def main():
                 write(csv_file, [host,'Exception','Exception'], 'a')
                 continue
 
+            command(client, host, "sudo apt install -y iperf3")
             out = loads(command(client, host, "iperf3 -c 192.168.1.8 -p 2222 -J"))
             client.close()
 
