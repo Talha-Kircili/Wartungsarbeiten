@@ -1,11 +1,11 @@
-from multiprocessing import Pool, freeze_support
+from multiprocessing import Pool
 from utils import *
 
 
 ''' settings '''
 csv_file = "smartmon.csv"   # output file
 table_head = ['PC', 'Zustand', 'Protokoll'] # column names
-defekt_pcs = [(3,2)] # defective systems in list of tuple, example: reihe3-pc2 => (3,2)
+defekt_pcs = [(3,2)] # defekte rechner in diese liste als tuple angeben. bsp.: reihe3-pc2 => (3,2)
 
 
 def main(x,y):
@@ -35,5 +35,5 @@ def main(x,y):
 if __name__ == "__main__":
     freeze_support()
     write(csv_file, table_head, 'w')
-    with Pool() as p:
+    with Pool() as p:   # später ändern zu Threading?
         p.starmap(main, list((x,y) for x in range(1,5) for y in range(1,7)))
