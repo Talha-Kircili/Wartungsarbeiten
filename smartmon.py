@@ -1,4 +1,4 @@
-from multiprocessing import Pool
+from multiprocessing import Pool, ThreadPool
 from utils import *
 
 
@@ -35,5 +35,5 @@ def main(x,y):
 if __name__ == "__main__":
     freeze_support()
     write(csv_file, table_head, 'w')
-    with Pool() as p:   # später ändern zu Threading?
+    with Pool() as p:   # or ThreadPool()
         p.starmap(main, list((x,y) for x in range(1,5) for y in range(1,7)))
