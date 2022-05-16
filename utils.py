@@ -1,4 +1,3 @@
-from multiprocessing import freeze_support
 from os.path import expanduser
 from json import loads
 from csv import writer
@@ -17,24 +16,26 @@ def write(file, data, mode):
         file_writer = writer(f)
         file_writer.writerow(data)
 
-def connect(host, username, key_file):
+def connect(hostname, username, key_filename=None, timeout=5, **kwargs):
     ssh_client = SSHClient()
+    ssh_client.load_system_host_keys(key_filename)
     ssh_client.set_missing_host_key_policy(AutoAddPolicy())
     try:
-        ssh_client.connect(host, username=username, key_filename=key_file, timeout=5)
+        ssh_client.connect(hostname, username=username, timeout=timeout, **kwargs)
     except Exception as e:
-        print(e)
+        print(f"{hostname}: {e}")
         return -1
     return ssh_client
 
-def command(host, hostname, cmd, shell=False):
+def command(user, hostname, cmd, **kwargs):
     output = ""
     print(f"{hostname}: {cmd}")
-    stdin, stdout, stderr = host.exec_command(cmd, get_pty=shell)
+    stdin, stdout, stderr = user.exec_command(cmd, **kwargs)
     if stdout.channel.recv_exit_status() == 0:
-        output = stdout.read().decode("utf8")
+        output = stdout.read().decode('UTF8')
     else:
-        print(f'{hostname}: STDERR: {stderr.read().decode("utf8")}')
+        print(f"{hostname}: STDERR: {stderr.read().decode('UTF8')}")
+        output = -1
     stdin.close()
     stdout.close()
     stderr.close()
