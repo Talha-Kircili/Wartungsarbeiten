@@ -19,7 +19,7 @@ def main(x,y):
     if client == -1:
         return write(csv_file, [hostname, 'Host unreachable', 'Host unreachable'], 'a')
     ''' check/install smartmontools '''
-    apt = command(client, hostname, "apt list -a smartmontools")
+    apt = command(client, hostname, "apt list --installed | grep smartmontools")
     if 'smartmontools' in apt:
         print(f"{hostname}: smartmontools is installed\n")
     else:
