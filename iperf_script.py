@@ -23,7 +23,7 @@ def main():
                 write(csv_file, [hostname,'Host unreachable', 'Host unreachable'], 'a')
                 continue
             ''' check/install iperf3 '''
-            apt = command(client, hostname, "apt list -a iperf3")
+            apt = command(client, hostname, "apt list --installed | grep iperf3")
             if 'iperf3' in apt:
                 print(f"{hostname}: iperf3 is installed")
             else:
